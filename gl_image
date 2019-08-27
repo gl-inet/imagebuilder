@@ -268,16 +268,12 @@ def main(argv):
             GetFirmwareInfo(os.getcwd() + "/bin")
             sys.exit(1)
 
-    if not ignore:
-        url = "https://github.com/gl-inet/glinet.git"
-        dir_name = "glinet"
+    url = "https://github.com/gl-inet/glinet.git"
+    dir_name = "glinet"
 
-        if not os.path.isdir(dir_name):
-            # check_call("git clone --single-branch -b %s --depth=1 %s %s" % (branch, url, dir_name), shell=True)
-            check_call("git clone %s %s" % (url, dir_name), shell=True)
-        else:
-            print("Update glinet repository ......")
-            check_call("git pull", shell=True, cwd=dir_name)
+    if not os.path.isdir(dir_name):
+        # check_call("git clone --single-branch -b %s --depth=1 %s %s" % (branch, url, dir_name), shell=True)
+        check_call("git clone %s %s" % (url, dir_name), shell=True)
 
     c = Config(filename)
 
@@ -285,6 +281,10 @@ def main(argv):
         show_images(c.imagesList())
         return 0
 
+    if not ignore:
+        print("Update glinet repository ......")
+        check_call("git pull", shell=True, cwd=dir_name)
+        
     # If WSL, Fix PATH variable (Required for building QSDK)
     if ('microsoft' in platform.uname()[3].lower()):
         print('WSL detected, fixed PATH')

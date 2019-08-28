@@ -4,7 +4,7 @@ Imagebuilder for GL.iNet devices. The Image Builder (previously called the Image
 
 ## GL.iNET Imagebuilder Introduction
 
-As the old imagebuilder repository gets bigger and bigger, it causes difficulty to download. So, we recreated the new imagebuilder. It is very small and fast than before. Executing 'git pull' under the old imagebuilder will conflict. So, please download it in the new working directory.
+As the old imagebuilder repository gets bigger and bigger, it causes difficulty to download and use. So, we recreated the new imagebuilder. It is very small and fast than before. Executing 'git pull' under the old imagebuilder will conflict. So, please download it in the new working directory. The old imagebuilder had alreadly moved to https://github.com/gl-inet/imagebuilder_archive.
 
 The file name "glinet/images.json" which saved in 'glinet' repository is our default config for making firmware. The 'glinet' repository is automatically downloaded when the 'gl_image' program is running.
 

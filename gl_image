@@ -12,7 +12,7 @@ from subprocess import check_call
 from subprocess import check_output
 
 gl_inet_imagebuilder_url = "https://github.com/gl-inet-builder/"
-
+gl_inet_ipks_url = "https://github.com/gl-inet/glinet.git"
 
 def usage(pname):
     print "GL.iNet imagebuilder tool"
@@ -271,12 +271,11 @@ def main(argv):
             GetFirmwareInfo(os.getcwd() + "/bin")
             sys.exit(1)
 
-    url = "https://github.com/gl-inet/glinet.git"
     dir_name = "glinet"
 
     if not os.path.isdir(dir_name):
         # check_call("git clone --single-branch -b %s --depth=1 %s %s" % (branch, url, dir_name), shell=True)
-        check_call("git clone %s %s" % (url, dir_name), shell=True)
+        check_call("git clone %s %s" % (gl_inet_ipks_url, dir_name), shell=True)
 
     c = Config(filename)
 

@@ -11,6 +11,9 @@ import platform
 from subprocess import check_call
 from subprocess import check_output
 
+gl_inet_imagebuilder_url = "https://github.com/gl-inet-builder/"
+
+
 def usage(pname):
     print "GL.iNet imagebuilder tool"
     print "Usage: " + pname + " [OPTIONS]"
@@ -103,13 +106,13 @@ class Config:
     def getRepoUrl(self, name):
         url = ""
         if self.data["profiles"][name].has_key("imagebuilder"):
-            url = "https://github.com/gl-inet-builder/" + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
+            url = gl_inet_imagebuilder_url + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
         return url
 
     def downloadImagebuilder(self, name, save_dir):
         url = ""
         if self.data["profiles"][name].has_key("imagebuilder"):
-            url = "https://github.com/gl-inet-builder/" + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
+            url = gl_inet_imagebuilder_url + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
         
         if url:
             check_call("git clone %s %s" % (url, save_dir), shell=True)

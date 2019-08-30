@@ -8,6 +8,10 @@ As the old imagebuilder repository gets bigger and bigger, it causes difficulty 
 
 The file name "glinet/images.json" which saved in 'glinet' repository is our default config for making firmware. The 'glinet' repository is automatically downloaded when the 'gl_image' program is running.
 
+If glinet repository is difficult to download, you can use the '--depth=' parameter to clone it manually.
+
+e.g. "git clone --depth=1 https://github.com/gl-inet/imagebuilder.git".
+
 You can have your own configuration. Such as 'customize.json', you can modify it at will. And run 'gl_image' program with '-c' parameter. For example, "./gl_image -c customize.json"
 
 ## System requirements ##

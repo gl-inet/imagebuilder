@@ -12,7 +12,7 @@ If glinet repository is difficult to download, you can use the '--depth=' parame
 
 e.g. "git clone --depth=1 https://github.com/gl-inet/imagebuilder.git".
 
-You can have your own configuration. Such as 'customize.json', you can modify it at will. And run 'gl_image' program with '-c' parameter. For example, "./gl_image -c customize.json"
+You can have your own configuration. Such as 'customize.json', you can modify it at will. And run 'gl_image' program with '-c' parameter. For example, "./gl_image -c customize.json -p ar150"
 
 ## System requirements ##
 

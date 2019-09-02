@@ -1,18 +1,16 @@
 # Imagebuilder #
 
-Imagebuilder for GL.iNet devices. The Image Builder (previously called the Image Generator) is a pre-compiled environment suitable for creating custom images without having to compile the entire OpenWRT build environment.
+Imagebuilder for GL.iNet devices. The Imagebuilder (previously called the Image Generator) is a pre-compiled environment suitable for creating custom images without having to compile the entire OpenWRT build environment.
 
-## GL.iNET Imagebuilder Introduction
+## Introduction
 
-As the old imagebuilder repository gets bigger and bigger, it causes difficulty to download and use. So, we recreated the new imagebuilder. It is very small and fast than before. Executing 'git pull' under the old imagebuilder will conflict. So, please download it in the new working directory. The old imagebuilder had alreadly moved to https://github.com/gl-inet/imagebuilder_archive.
+As the old imagebuilder repository gets bigger and bigger, it makes it harder to download and use. Because of this we have improved the imagebuilder code. It is smaller and faster than before, however, executing 'git pull' under the old imagebuilder will conflict, so please clone the new imagebuilder to a new directory or delete the old one. The old imagebuilder has been moved to https://github.com/gl-inet/imagebuilder_archive.
 
-The file name "glinet/images.json" which saved in 'glinet' repository is our default config for making firmware. The 'glinet' repository is automatically downloaded when the 'gl_image' program is running.
+The companion https://github.com/gl-inet/glinet repository is downloaded automatically when running the **gl_image** program. If you encounter any issues downloading the glinet repository, you can use the '--depth=' parameter to clone it manually:
 
-If glinet repository is difficult to download, you can use the '--depth=' parameter to clone it manually.
-
-e.g. "git clone --depth=1 https://github.com/gl-inet/imagebuilder.git".
-
-You can have your own configuration. Such as 'customize.json', you can modify it at will. And run 'gl_image' program with '-c' parameter. For example, "./gl_image -c customize.json -p ar150"
+```bash
+git clone --depth=1 https://github.com/gl-inet/imagebuilder gl_imagebuilder
+```
 
 ## System requirements ##
 
@@ -50,6 +48,10 @@ The Imagebuilder requires a "case sensitive" system, Windows is unfortunately no
 To build all the device firmwares, run **./gl_image -a**. To build a specific firmware, run **./gl_image -p <image_name>**. You can list all the device names by running **./gl_image -l**.
 
 Run **./gl_image -h** to see more details and advanced options.
+
+To use your own configuration, use the **customize.json** file. Make any changes and run the imagebuilder with the following command to run the custom configuration:
+
+**./gl_image -c customize.json -p <image_name>**
 
 ## Complete usage example ##
 
@@ -109,7 +111,7 @@ profiles: Configuration for each firmware
     {
         profile: The name of the device. Run "make info" for a list of available devices.
         version: Firmware version. Generates a version file called /etc/glversion and overrides /etc/opk/distfeeds.conf with the version number
-        imagebuilder: Image builder folder
+        imagebuilder: Imagebuilder folder
         packages: Packages in the firmware. Variables include the default packages. Add the package name to include. "-" appended to the package name excludes the package, eg: "-mwan3"
         files: Files folder, it allows customized configuration files to be included in images built with Image Generator, all files from the folder will be copied into device's rootfs("/").
     }

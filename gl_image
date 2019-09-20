@@ -343,13 +343,14 @@ def main(argv):
             continue
 
         # Offline mode
-        if offline:
-            check_call("cp %s/glinet/%s/Packages dl/glinet" % (os.getcwd(), board), shell=True, cwd=im_path)
-            check_call("cp packages/Packages dl/imagebuilder", shell=True, cwd=im_path)
-            check_call("sed -i 's/$(OPKG) update/# $(OPKG) update/g' Makefile", shell=True, cwd=im_path)
-            check_call("sed -i 's/#.*\s*$(OPKG) update/# $(OPKG) update/g' Makefile", shell=True, cwd=im_path)
-        else:
-            check_call("sed -i 's/#\s.*$(OPKG) update/$(OPKG) update/g' Makefile", shell=True, cwd=im_path)
+        if c.getProfile(image) != "QSDK_Premium":
+            if offline:
+                check_call("cp %s/glinet/%s/Packages dl/glinet" % (os.getcwd(), board), shell=True, cwd=im_path)
+                check_call("cp packages/Packages dl/imagebuilder", shell=True, cwd=im_path)
+                check_call("sed -i 's/$(OPKG) update/# $(OPKG) update/g' Makefile", shell=True, cwd=im_path)
+                check_call("sed -i 's/#.*\s*$(OPKG) update/# $(OPKG) update/g' Makefile", shell=True, cwd=im_path)
+            else:
+                check_call("sed -i 's/#\s.*$(OPKG) update/$(OPKG) update/g' Makefile", shell=True, cwd=im_path)
 
         # Create link
         glinet_dir = "%s/glinet" % os.getcwd()
@@ -370,6 +371,7 @@ def main(argv):
             check_output("mkdir -p %s" % bin_dir, shell=True)
 
         try:
+            os.environ['OFFLINE'] = str(offline)
             check_call("make image \
                     PROFILE=%s \
                     PACKAGES=\"%s\" \

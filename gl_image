@@ -23,11 +23,12 @@ def usage(pname):
     print " -e|--extra          Extra packages allows to include and/or exclude packages"
     print " -b|--branch         Change package branch. Default: develop"
     print " -l|--list           List all available profiles"
-    print " -i|--ignore         Ignore ipk update from glinet repo"
+    print " -i|--ignore         Ignore private ipk update from glinet repo"
     print " -n|--clean          Remove images and temporary build files"
     print " -c|--config         User-defined configuration file"
     print " -h|--help           Show this text message"
     print " -o|--output         Get firmware info, firmware name/md5sum/size"
+    print " --offline           Ignore opensource ipk update"
     print ""
     print "Example: "
     print '''

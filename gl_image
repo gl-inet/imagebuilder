@@ -15,32 +15,45 @@ gl_inet_imagebuilder_url = "https://github.com/gl-inet-builder/"
 gl_inet_ipks_url = "https://github.com/gl-inet/glinet.git"
 
 def usage(pname):
-    print "GL.iNet imagebuilder tool"
-    print "Usage: " + pname + " [OPTIONS]"
-    print ""
-    print " -a|--all            Build all images from the specified profiles in images.json"
-    print " -p|--profile        Build a specified image from the specified profiles"
-    print " -e|--extra          Extra packages allows to include and/or exclude packages"
-    print " -b|--branch         Change package branch. Default: develop"
-    print " -l|--list           List all available profiles"
-    print " -i|--ignore         Ignore private ipk update from glinet repo"
-    print " -n|--clean          Remove images and temporary build files"
-    print " -c|--config         User-defined configuration file"
-    print " -h|--help           Show this text message"
-    print " -o|--output         Get firmware info, firmware name/md5sum/size"
-    print " --offline           Ignore opensource ipk update"
-    print ""
-    print "Example: "
-    print '''
-    The following command compiles a firmware for mifi with basic packages and
-    extra package(openssh-sftp-server, nano, htop), using images.json as default
-    configuration file.
-            '''
-    print ""
-    print '    python2.7 gl_image -p mifi -e "openssh-sftp-server nano htop"'
-    print ""
+    print("GL.iNet imagebuilder tool")
+    print("Usage: " + pname + " [OPTIONS]")
+    print("")
+    print(" -a|--all            Build all images from the specified profiles in images.json")
+    print(" -p|--profile        Build a specified image from the specified profiles")
+    print(" -e|--extra          Extra packages allows to include and/or exclude packages")
+    print(" -b|--branch         Change package branch. Default: develop")
+    print(" -l|--list           List all available profiles")
+    print(" -i|--ignore         Ignore private ipk update from glinet repo")
+    print(" -n|--clean          Remove images and temporary build files")
+    print(" -c|--config         User-defined configuration file")
+    print(" -h|--help           Show this text message")
+    print(" -o|--output         Get firmware info, firmware name/md5sum/size")
+    print(" --offline           Ignore opensource ipk update")
+    print("")
+    print("Example: ")
+    print (" \
+    The following command compiles a firmware for mifi with basic packages and\n \
+    extra package(openssh-sftp-server, nano, htop), using images.json as default\n \
+    configuration file.\n \
+            ")
+    print("")
+    print("    python2.7 gl_image -p mifi -e \"openssh-sftp-server nano htop\"")
+    print("")
 
     sys.exit(1)
+
+def CleanupGlinetTmpFile(f):
+    tmpfile = ""
+    if os.path.exists(f + "/repositories.conf"):
+        file = open(f + "/repositories.conf")
+        for line in file.readlines():
+            line = line.strip('\n')
+            if "src glinet file:glinet/" in line:
+                tmpfile = line.split(':',1)[1] + "/Packages.*"
+                file.close()
+                break
+    if tmpfile != "":
+        os.system(r"rm %s"%tmpfile)
 
 def GetFirmwareInfo(f):
     files = os.listdir(f)
@@ -284,10 +297,6 @@ def main(argv):
         show_images(c.imagesList())
         return 0
 
-    if not ignore:
-        print("Update glinet repository ......")
-        check_call("git pull", shell=True, cwd=dir_name)
-        
     # If WSL, Fix PATH variable (Required for building QSDK)
     if ('microsoft' in platform.uname()[3].lower()):
         print('WSL detected, fixed PATH')
@@ -299,6 +308,10 @@ def main(argv):
         images.append(profile)
     else:
         usage(pname)
+
+    if not ignore:
+        print("Update glinet repository ......")
+        check_call("git pull", shell=True, cwd=dir_name)
 
     if clean:
         for image in images:
@@ -318,6 +331,10 @@ def main(argv):
     
         # Search imagebuilder path
         im_path = os.getcwd() + "/imagebuilder/" + c.getImagebuilderPath(image)
+
+        # Clean up glinet tmp file Packages/Packages.gz/Packages.manifest
+        CleanupGlinetTmpFile(im_path)
+
         if not os.path.isdir(im_path):
             c.downloadImagebuilder(image, "imagebuilder/" + c.getImagebuilderPath(image))
         # else:
@@ -409,9 +426,6 @@ def main(argv):
                 print("Copy " + output + " to " + fw_name)
 
             elif image == "mv1000-emmc":
-                print(c.getProfile(image))
-                print(image)
-                print(bin_dir)
                 check_call("find bin/ -name \"*%s-squashfs-emmc*\" | xargs cp -t %s/" \
                         % (c.getProfile(image).lower(), bin_dir), shell=True, cwd=im_path)
                 return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-squashfs-emmc*\"" % (c.getProfile(image).lower()))

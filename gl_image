@@ -8,6 +8,7 @@ import getopt
 import time
 import commands
 import platform
+import hashlib
 from subprocess import check_call
 from subprocess import check_output
 
@@ -55,20 +56,38 @@ def CleanupGlinetTmpFile(f):
     if tmpfile != "":
         os.system(r"rm %s"%tmpfile)
 
-def GetFirmwareInfo(f):
+def GetMd5Sum(file_name):
+    with open(file_name) as file_to_check:
+        data = file_to_check.read()
+        md5sum = hashlib.md5(data).hexdigest()
+        return md5sum
+
+def GetFirmwareInfo(f, config):
+    c = Config(config)
     files = os.listdir(f)
     files.sort()
+    str_model="model"
+    str_firmware_name = "firmware name"
+    str_firmware_md5sum = "md5sum"
+    str_firmware_size = "size"
+    str_ib = "imagebuilder version"
+    print("%14s  %-40s %-34s %-10s %-30s" % (str_model, str_firmware_name, str_firmware_md5sum, str_firmware_size, str_ib))
     for file in files:
-        t_path = os.path.join(f, file)
-        if not os.path.isdir(t_path):
-            # print('file: %s'%t_path)
-            return_code, output = commands.getstatusoutput("md5sum %s" % (t_path))
-            print(os.path.basename(t_path) + " " + output.split(" ")[0] + " " + str(os.path.getsize(t_path)))
-        else:
-            # print('folder: %s'%t_path)
-            print('\n')
-            print(os.path.basename(t_path))
-            GetFirmwareInfo(t_path)
+        subfiles = os.listdir(f + "/" + file)
+        subfiles.sort(reverse=True)
+        md5sum = GetMd5Sum(f + "/" + file + "/" + subfiles[0])
+        ib = c.getImagebuilderPath(file)
+        print("%14s  %-40s %-34s %-10s %-30s" % (file, subfiles[0], md5sum, str(os.path.getsize(f + "/" + file + "/" + subfiles[0])), ib))
+        # t_path = os.path.join(f, file)
+        # if not os.path.isdir(t_path):
+        #     # print('file: %s'%t_path)
+        #     md5sum = GetMd5Sum(t_path)
+        #     print(os.path.basename(t_path) + " " + md5sum + " " + str(os.path.getsize(t_path)))
+        # else:
+        #     # print('folder: %s'%t_path)
+        #     print('\n')
+        #     print(os.path.basename(t_path))
+        #     GetFirmwareInfo(t_path)
 
 class Config:
     def __init__(self, filename):
@@ -282,7 +301,7 @@ def main(argv):
         if o in ("-h", "--help"):
             usage(pname)
         if o in ("-o", "--output"):
-            GetFirmwareInfo(os.getcwd() + "/bin")
+            GetFirmwareInfo(os.getcwd() + "/bin", filename)
             sys.exit(1)
 
     dir_name = "glinet"

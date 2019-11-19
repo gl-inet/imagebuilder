@@ -475,10 +475,13 @@ def main(argv):
                 print("Copy " + output + " to " + fw_name)
 
                 if c.getImagebuilderPath(image).find('nand') != -1:
-                    check_call("find bin/ -name \"*%s*ubi-factory*\" | xargs cp -t %s/" \
-                            % (image, bin_dir), shell=True, cwd=im_path)
+                    if image == "e750":
+                    	check_call("find bin/ -name \"*%s*squashfs-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
+                    	return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (c.getProfile(image).lower()))
+                    else:
+                        check_call("find bin/ -name \"*%s*ubi-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
+                    	return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*ubi-factory*\"" % (c.getProfile(image).lower()))
 
-                    return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*ubi-factory*\"" % (c.getProfile(image).lower()))
                     if filename != "glinet/images.json":
                         fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + "_" + os.path.splitext(filename)[0] + os.path.splitext(output)[-1]
                     else:

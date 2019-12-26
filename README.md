@@ -143,6 +143,8 @@ Placing the helloworld.ipk in the *glinet/ar71xx* folder and running **./gl_imag
 
 ## How to compile stable firmware based on GL.iNet?
 
+Make sure you have compiled it once. It will automatically download the specified imagebuilder and glinet repository. 
+
 Select the version you want to make, sush as mifi_v3.023,
 
 ```
@@ -158,7 +160,7 @@ $ ./gl_image -i -p mifi
 Oops! Failed to parse glinet/images.json
 ```
 
-Warnning, If you encounter this error, don't panic. Please copy the corresponding version in the config directory to the gline directory and run again.
+Warnning, If you encounter this error, don't panic. Please copy the corresponding version in the config directory to the glinet directory and run again.
 
 ```
 $ cp config/images.json.3.023 glinet/images.json

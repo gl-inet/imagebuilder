@@ -55,7 +55,7 @@ To use your own configuration, use the **customize.json** file. Make any changes
 
 ## Complete usage example ##
 
-To make an image for the **Mifi** with some extra packages included:
+To make an image for the **Mifi** with some [extra packages](https://openwrt.org/packages/start) included:
 
 ```bash
 ./gl_image -p mifi -e "openssh-sftp-server nano htop"

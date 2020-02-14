@@ -126,18 +126,19 @@ And we want to create a clean customized firmware for our AR150 device that incl
 
 ```bash
 {
-    "profiles":
-    {
-        "helloworld":
-	{
-            "profile": "gl-ar150",
-            "version": "3.001",
-            "imagebuilder": "3.0/openwrt-imagebuilder-ar71xx-generic",
-            "packages": "luci helloworld"
-        }
-    }
+	"profiles": {
+		"helloworld": {
+			"profile": "gl-ar150",
+			"version": "3.001",
+			"imagebuilder": "3.0/openwrt-imagebuilder-ar71xx-generic",
+			"packages": "luci helloworld"
+			"files": "files_folder"
+		}
+	}
 }
 ```
+
+Note: the `files_folder` path can be a relative path or an absolute path or current directory.
 
 Placing the helloworld.ipk in the *glinet/ar71xx* folder and running **./gl_image -c myfirst.json -p helloworld** will build our clean image with our helloworld.ipk included.
 

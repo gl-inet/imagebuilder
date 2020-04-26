@@ -149,15 +149,15 @@ Make sure you have compiled it once. It will automatically download the specifie
 Select the version you want to make, sush as mifi_v3.023,
 
 ```
-$ cd glinet/
-$ git tag -l
+1.clone imagebuilder
+$ git clone https://github.com/gl-inet/imagebuilder.git
+2.switch to imagebuilder folder
+$ cd imagebuilder
+3.clone glinet (default master branch)
+$ git clone https://github.com/gl-inet/glinet.git
+4.compile firmware
+$ ./gl_image -p mifi
 ...
-mifi_v3.023_20190513
-...
-
-$ git checkout mifi_v3.023_20190513
-$ cd ../
-$ ./gl_image -i -p mifi
 Oops! Failed to parse glinet/images.json
 ```
 

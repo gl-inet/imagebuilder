@@ -146,19 +146,50 @@ Placing the helloworld.ipk in the *glinet/ar71xx* folder and running **./gl_imag
 
 Make sure you have compiled it once. It will automatically download the specified imagebuilder and glinet repository. 
 
-Select the version you want to make, sush as mifi_v3.023,
+Example 1:Select the version you want to make, sush as mifi
 
+1. clone imagebuilder
 ```
-1.clone imagebuilder
 $ git clone https://github.com/gl-inet/imagebuilder.git
-2.switch to imagebuilder folder
+```
+2. switch to imagebuilder folder
+```
 $ cd imagebuilder
-3.clone glinet (default master branch)
+```
+3. clone glinet (default master branch)
+```
 $ git clone https://github.com/gl-inet/glinet.git
-4.compile firmware
+```
+4. compile firmware
+```
 $ ./gl_image -p mifi
-...
-Oops! Failed to parse glinet/images.json
+```
+Example 2:Select another branch to compile
+
+1. clone imagebuilder
+```
+$ git clone https://github.com/gl-inet/imagebuilder.git
+```
+2. switch to imagebuilder folder
+```
+$ cd imagebuilder
+```
+3. clone glinet (default master branch)
+```
+$ git clone https://github.com/gl-inet/glinet.git
+```
+4. switch to ar750s branch to compile
+```
+$ cd glinet
+$ git checkout ar750s
+```
+5. return to the imagebuilder folder
+```
+$ cd ../
+```
+6. compile firmware
+```
+$ ./gl_image -p ar750s
 ```
 
 Warnning, If you encounter this error, don't panic. Please copy the corresponding version in the config directory to the glinet directory and run again.

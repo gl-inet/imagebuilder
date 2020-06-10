@@ -436,6 +436,15 @@ def main(argv):
                         fw_name = bin_dir + "/" + "qsdk-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                         os.system('mv ' + output + ' ' + fw_name)
                     # return_code, output = commands.getstatusoutput("basename %s" % output)
+                elif image == "ap1300":
+                    check_call("find single_img_dir/ -name ap1300-nornand-apps.img | xargs cp -t %s/" \
+                            % (bin_dir), shell=True, cwd=im_path)
+
+                    return_code, output = commands.getstatusoutput("find bin/ap1300/ -name ap1300-nornand-apps.img")
+                    if output != "":
+                        fw_name = bin_dir + "/" + "qsdk-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
+                        os.system('mv ' + output + ' ' + fw_name)
+                    # return_code, output = commands.getstatusoutput("basename %s" % output)
                 else:
                     check_call("find single_img_dir/ -maxdepth 1 -name *.img | xargs cp -t %s/" \
                             % (bin_dir), shell=True, cwd=im_path)

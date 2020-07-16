@@ -1,4 +1,6 @@
-# Imagebuilder #
+
+
+# Imagebuilder
 
 Imagebuilder for GL.iNet devices. The Imagebuilder (previously called the Image Generator) is a pre-compiled environment suitable for creating custom images without having to compile the entire OpenWRT build environment.
 
@@ -12,7 +14,7 @@ The companion https://github.com/gl-inet/glinet repository is downloaded automat
 git clone --depth=1 https://github.com/gl-inet/imagebuilder gl_imagebuilder
 ```
 
-## System requirements ##
+## System requirements
 
 - x86_64 platform
 - Ubuntu or another linux distro
@@ -21,7 +23,7 @@ Running Imagebuilder under Windows can be done using the Windows Subsystem For L
 
 https://docs.microsoft.com/en-us/windows/wsl/install-win10
 
-## Preparing your build environment ##
+## Preparing your build environment
 
 To use the Imagebuilder on your system will usually require you to install some extra packages.
 
@@ -32,7 +34,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install device-tree-compiler gawk gcc git g++ make ncurses-dev python unzip -y
 ```
 
-## Clone the Imagebuilder to your system ##
+## Clone the Imagebuilder to your system
 
 ```bash
 git clone https://github.com/gl-inet/imagebuilder gl_imagebuilder
@@ -43,7 +45,7 @@ cd gl_imagebuilder
 
 The Imagebuilder requires a "case sensitive" system, Windows is unfortunately not. To run the Imagebuilder in WSL you **MUST** clone the repo to the linux folder tree, ie: ```/home/<username>/``` or any other folder you choose. This is required, you **CAN NOT** run it from ```/mnt/c/``` or any other windows native drive mounted in WSL. Running the Imagebuilder from a Windows mounted disk will result in a failed build with cryptic messages.
 
-## Usage ##
+## Usage
 
 To build all the device firmwares, run **./gl_image -a**. To build a specific firmware, run **./gl_image -p <image_name>**. You can list all the device names by running **./gl_image -l**.
 
@@ -53,7 +55,7 @@ To use your own configuration, use the **customize.json** file. Make any changes
 
 **./gl_image -c customize.json -p <image_name>**
 
-## Complete usage example ##
+## Complete usage example
 
 To make an image for the **Mifi** with some [extra packages](https://openwrt.org/packages/start) included:
 
@@ -65,7 +67,7 @@ You'll find the compiled firmware image in *bin/gl-mifi/openwrt-mifi-ar71xx-gene
 
 For other firmwares, the compiled firmware file is in **bin/<device_name>/**
 
-## Docker build environment ##
+## Docker build environment
 
 You can also use a docker container as build environment.
 
@@ -99,55 +101,72 @@ You'll find the compiled firmware image in *bin/gl-mifi/openwrt-mifi-ar71xx-gene
 
 For other firmwares, the compiled firmware file is in **bin/<device_name>/**
 
-## How to build custom ipk with imagebuilder?
-1. The new download of the uncompiled imagebuilder code in the root directory did not generate */imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1* directory structure, need to use **./gl_image -c custom.json -p <image_name>** to compile the source code once.Then create the packages directory in the *gl_imagebuilder/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1* directory and place the customized **ipk** in that directory, as shown below，I put in a **mylibndpi_2.8-1_mips_24kc.ipk**
+## Adding custom packages to your image
 
-```
-linux@ubuntu:~/gl_imagebuilder/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1$ ls packages/
-```
-kernel_4.9.120-1-3b343e31a06aaa866bf90c839452ce76_mips_24kc.ipk  **mylibndpi_2.8-1_mips_24kc.ipk**
-libc_1.1.19-1_mips_24kc.ipk                                      Packages
-libconfig_1.5-1_mips_24kc.ipk                                    Packages.gz
-libjson-c_0.12.1-1_mips_24kc.ipk                                 uclibcxx_0.2.4-3_mips_24kc.ipk
-libpcap_1.8.1-1_mips_24kc.ipk
+**1.** To create the required directory structure, you must run the Imagebuilder at least once using **./gl_image -p <image_name>**.
 
-2.Modify the **customize.json** file.
+**2.** Place your custom package in the packages folder of the Imagebuilder target. For the **Mifi** the folder is:
 
-	"mifi": {
-			"profile": "gl-mifi",
-			"version": "3.027",
-			"imagebuilder": "3.1/openwrt-imagebuilder-ar71xx-generic_3.1",
-			"packages": "gl-base-files-ar $basic $vpn $storage $glinet $usb -wpa-cli -kmod-rt2800-usb mylibndpi"
-
-		}
-
-Just package the **ipk** file without setting the files property.
-
-----------
-
-If you want to compile your own /etc/init.d/gl_init files or /www folders, you need to specify the files properties.Then create the files directory in the *gl_imagebuilder/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1* directory.The modified */etc/init.d/gl_init* file, according to the folder directory structure put into the *gl_imagebuilder/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/files* directory.The modified */www* folder is also placed in the files directory. As shown below.
-```
-linux@ubuntu:~/gl_imagebuilder/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/files$ ls
+```bash
+imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/packages/
 ```
 
-**etc  www**
+**3.** Modify the **customize.json** file, adding the name of your package to the end of the "packages" property of your target:
 
-	"mifi": {
-			"profile": "gl-mifi",
-			"version": "3.027",
-			"imagebuilder": "3.1/openwrt-imagebuilder-ar71xx-generic_3.1",
-			"packages": "gl-base-files-ar $basic $vpn $storage $glinet $usb -wpa-cli -kmod-rt2800-usb mylibndpi",
-		        "files": "imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/files"
-		}
+"**mifi**":<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"profile": "gl-mifi",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"version": "3.027",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"imagebuilder": "3.1/openwrt-imagebuilder-ar71xx-generic_3.1",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"packages": "gl-base-files-ar $basic $vpn $storage $glinet $usb -wpa-cli -kmod-rt2800-usb **mylibndpi**"<br/>
+}
 
-----------
-3.Save the customize.json file.
+**4.** Re-run the Imagebuilder using the custom config file: **./gl_image -c customize.json -p <image_name>**
 
-4.Compile the code with **./gl_image -c custom.json -p mifi**
+**5.** You custom package will be included in the compiled firmware.
 
-5.Completed in *gl_imagebuilder/bin/mifi/openwrt-mifi-3.027-0312_customize.bin*, find the bin file and installed to the routing.
+## Including / changing files in your image
 
-## How to compile stable firmware based on GL.iNet?
+**1.** To create the required directory structure, you must run the Imagebuilder at least once using **./gl_image -p <image_name>**.
+
+**2.** If you want to for example add files to the /www folder of the firmware, or change files in the /etc folder, you will need to specify a root files folder when creating the image.  For the Mifi, we will create a new folder named "files" inside the following folder:
+
+```bash
+imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/packages/
+```
+So we end up with:
+
+```bash
+imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/files/
+```
+
+**3.** The folder we created will serve as a custom root for the image, where any files we put inside will be copied to the final image, replacing any existing files. If we for example wanted to add a new file called **/usr/myfile** to the final image, we would place it in our custom root as bellow:
+
+> imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/files/**usr/myfile**
+
+If we for example wanted to replace a config file in the firmware, such as the firewall config **/etc/config/firewall** we would copy the default file, change it, and place it in our custom root:
+
+> imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/files/**etc/config/firewall**
+
+⚠️ Notice that the GL firmware has a lot of scripts, many that run on first boot of the firmware. Those scripts might modify files and cause confusion. If you notice that one of your updated files is being replaced, you will need to find which script is modifying your file. You could also add your own script that runs after a certain time, replacing your files on first boot. This is beyond the scope of this document, but it's possible to do.
+
+**4.** Modify the **customize.json** file, adding the "files" property to your target, pointing to our custom root folder:
+
+"**mifi**":<br/>
+{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"profile": "gl-mifi",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"version": "3.027",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"imagebuilder": "3.1/openwrt-imagebuilder-ar71xx-generic_3.1",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;"packages": "gl-base-files-ar $basic $vpn $storage $glinet $usb -wpa-cli -kmod-rt2800-usb",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;**"files": "imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1/files"**,<br/>
+}
+
+**5.** Re-run the Imagebuilder using the custom config file: **./gl_image -c customize.json -p <image_name>**
+
+**6.** You file changes will be included in the compiled firmware.
+
+
+## Compiling a stock GL-iNet firmware
 
 Make sure you have compiled it once. It will automatically download the specified imagebuilder and glinet repository. 
 
@@ -203,4 +222,3 @@ Warnning, If you encounter this error, don't panic. Please copy the correspondin
 $ cp config/images.json.3.023 glinet/images.json
 $ ./gl_image -i -p mifi
 ```
-

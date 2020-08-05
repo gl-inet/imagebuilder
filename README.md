@@ -1,7 +1,8 @@
 # Imagebuilder
 
 Imagebuilder for GL.iNet devices. The Imagebuilder (previously called the Image Generator) is a pre-compiled environment suitable for creating custom images without having to compile the entire OpenWRT build environment.
-***Note: Using the imagebuilder you can build a firmware using GL.iNet Router API and User Interface. This is free for personal use. If you use for commercial project, you need to obtain a commercial license. ***
+
+**Note: Using the imagebuilder you can build a firmware using GL.iNet Router API and User Interface. This is free for personal use. If you use for commercial project, you need to obtain a commercial license. **
 
 ## Introduction
 

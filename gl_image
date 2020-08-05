@@ -356,6 +356,9 @@ def main(argv):
 
         if not os.path.isdir(im_path):
             c.downloadImagebuilder(image, "imagebuilder/" + c.getImagebuilderPath(image))
+        elif c.getProfile(image) == "QSDK_Premium":
+            print("Update imagebuilder repository ......")
+            check_call("git pull", shell=True, cwd=im_path)
         # else:
         #     print("Update imagebuilder repository ......")
         #     check_call("git pull", shell=True, cwd=im_path)

@@ -317,7 +317,7 @@ def main(argv):
         return 0
 
     # If WSL, Fix PATH variable (Required for building QSDK)
-    if ('microsoft' in platform.uname()[3].lower()):
+    if (('microsoft' in platform.uname()[3].lower()) or ('microsoft' in platform.uname()[2].lower())):
         print('WSL detected, fixed PATH')
         os.environ['PATH'] = ':'.join([r for r in os.environ['PATH'].split(':') if not r.startswith('/mnt')])
 

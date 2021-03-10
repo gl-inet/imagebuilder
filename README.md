@@ -72,6 +72,7 @@ To use your own configuration, use the **customize.json** file. Make any changes
 ```
 $ ./gl_image -c customize.json -p mifi
 ```
+**customize.json is just a demo that tells the customer how to modify the configuration file. GL is not maintained continuously. If you can't modify this file, please don't use customize.json to compile the firmware**
 ## 3.Add additional packages
 
 For example, make an image for the **mifi** with some [extra packages](https://openwrt.org/packages/start) included:
@@ -174,7 +175,7 @@ $ ./gl_image -i -p ar750s
 If you encounter this error, don't panic. Please copy the corresponding version in the config directory to the glinet directory and run again.
 
 ```
-$ cp config/images.json.3.025 glinet/images.json
+$ cp glinet/images.json glinet/images.json
 $ ./gl_image -i -p ar750s
 ```
 

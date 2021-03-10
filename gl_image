@@ -490,6 +490,9 @@ def main(argv):
                     if image == "e750-1907":
                     	check_call("find bin/ -name \"*%s*squashfs-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
                     	return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (c.getProfile(image).lower()))
+                    elif image == "xe300":
+                        check_call("find bin/ -name \"*%s*-factory.img\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
+                        return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*-factory.img\"" % (c.getProfile(image).lower()))
                     else:
                         check_call("find bin/ -name \"*%s*ubi-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
                     	return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*ubi-factory*\"" % (c.getProfile(image).lower()))

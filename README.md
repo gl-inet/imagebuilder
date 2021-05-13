@@ -66,14 +66,7 @@ To see more details and advanced options,run
 $ ./gl_image -h
 ```
 
-## 2.Use your own configuration
-
-To use your own configuration, use the **customize.json** file. Make any changes and run the command **./gl_image -c customize.json -p <image_name>** to build custom configured firmware.For example, build your custom configured firmware for the mifi:
-```
-$ ./gl_image -c customize.json -p mifi
-```
-**customize.json is just a demo that tells the customer how to modify the configuration file. GL is not maintained continuously. If you can't modify this file, please don't use customize.json to compile the firmware**
-## 3.Add additional packages
+## 2.Add additional packages
 
 For example, make an image for the **mifi** with some [extra packages](https://openwrt.org/packages/start) included:
 
@@ -170,24 +163,29 @@ $ cd ../
 $ ./gl_image -i -p ar750s
 ```
 
-**Oops! Failed to parse glinet/images.json**
-
-If you encounter this error, don't panic. Please copy the corresponding version in the config directory to the glinet directory and run again.
-
-```
-$ cp glinet/images.json glinet/images.json
-$ ./gl_image -i -p ar750s
-```
-
 # Build a custom ipk using imagebuilder
 
 You can go to the link https://github.com/gl-inet/sdk according to the instructions to compile helloworld.ipk. Use this package for imagebuilder test.Or use your own ipk and emulate the following steps to build the firmware.
 
 ## Basic configuration
+All the GL device package configuration is done with the **glinet/images.json** file. The following
+
+	packages: The default packages included in all firmwares
+	profiles: Configuration for each firmware
+	{
+		<image_name>:
+		{
+		    profile: The name of the device. Run "make info" for a list of available devices.
+		    version: Firmware version. Generates a version file called /etc/glversion and overrides /etc/opk/distfeeds.conf with the version number
+		    imagebuilder: Image builder folder
+		    packages: Packages in the firmware. Variables include the default packages. Add the package name to include. "-" appended to the package name excludes the package, eg: "-mwan3"
+		    files: Files folder, it allows customized configuration files to be included in images built with Image Generator, all files from the folder will be copied into device's rootfs("/").
+		}
+	}
 
 **Add ipk packages**
 
-1.The new download of the uncompiled imagebuilder code in the root directory did not generate **/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1** directory structure, need to use **./gl_image -c custom.json -p <image_name>** to compile the source code once.
+1.The new download of the uncompiled imagebuilder code in the root directory did not generate **/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1** directory structure, need to use **./gl_image -p <image_name>** to compile the source code once.
 
   Then create the **packages** directory in the **gl_imagebuilder/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-generic_3.1** directory and place the customized **ipk** in that directory, as shown below，I put in a **helloworld_1.0_mips_24kc.ipk**
 
@@ -201,7 +199,7 @@ libc_1.1.19-1_mips_24kc.ipk                                      Packages.gz
 ..............
 ..............
 ```
-2.Modify the **customize.json** file.
+2.Modify the **glinet/images.json** file.
 
 	"mifi": {
 			"profile": "gl-mifi",
@@ -223,7 +221,7 @@ linux@ubuntu:~/gl_imagebuilder/imagebuilder/3.1/openwrt-imagebuilder-ar71xx-gene
 
 etc  www
 ```
-2.Modify the **customize.json** file.
+2.Modify the **glinet/images.json** file.
 
 	"mifi": {
 			"profile": "gl-mifi",
@@ -234,28 +232,13 @@ etc  www
 		}
 
 ----------
-3.Save the customize.json file.
+3.Save the glinet/images.json file.
 
-4.Compile the code with **./gl_image -c custom.json -p mifi**
+4.Compile the code with **./gl_image -p mifi**
 
-5.Completed in *gl_imagebuilder/bin/mifi/openwrt-mifi-3.027-0312_customize.bin*, find the bin file and installed to the routing.
+5.Completed in *gl_imagebuilder/bin/mifi/openwrt-mifi-3.027-0312.bin*, find the bin file and installed to the routing.
 
 ## Advanced configuration
-
-All the GL device package configuration is done with the **images.json** file. The following
-
-	packages: The default packages included in all firmwares
-	profiles: Configuration for each firmware
-	{
-		<image_name>:
-		{
-		    profile: The name of the device. Run "make info" for a list of available devices.
-		    version: Firmware version. Generates a version file called /etc/glversion and overrides /etc/opk/distfeeds.conf with the version number
-		    imagebuilder: Image builder folder
-		    packages: Packages in the firmware. Variables include the default packages. Add the package name to include. "-" appended to the package name excludes the package, eg: "-mwan3"
-		    files: Files folder, it allows customized configuration files to be included in images built with Image Generator, all files from the folder will be copied into device's rootfs("/").
-		}
-	}
 
 **Example**
 

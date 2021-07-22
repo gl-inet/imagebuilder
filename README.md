@@ -78,61 +78,6 @@ You'll find the compiled firmware image in *bin/gl-mifi/openwrt-mifi-ar71xx-gene
 For other firmwares, the compiled firmware file is in **bin/<device_name>/**
 
 # Compile stable firmware based on GL.iNet.
-
-Make sure you have compiled it once. It will automatically download the specified imagebuilder and glinet repository. 
-
-## Example 1
-Select the GL.iNet standard firmware that you want to make,such as the mifi
-
-1. clone imagebuilder
-```
-$ git clone https://github.com/gl-inet/imagebuilder.git
-```
-2. switch to imagebuilder folder
-```
-$ cd imagebuilder
-```
-3. clone glinet (default master branch)
-```
-$ git clone https://github.com/gl-inet/glinet.git
-```
-4. compile firmware
-```
-$ ./gl_image -p mifi
-```
-
-## Example 2
-Select another branch to compile,such as ar750s branch(this method is generally required for compiling the latest firmware)
-
-1. clone imagebuilder
-```
-$ git clone https://github.com/gl-inet/imagebuilder.git
-```
-2. switch to imagebuilder folder
-```
-$ cd imagebuilder
-```
-3. clone glinet (default master branch)
-```
-$ git clone https://github.com/gl-inet/glinet.git
-```
-4. switch to ar750s branch to compile
-```
-$ cd glinet
-$ git checkout ar750s
-```
-5. return to the imagebuilder folder
-```
-$ cd ../
-```
-6. compile firmware
-```
-$ ./gl_image -p ar750s
-```
-
-## Example 3
-Choose another tag to compile the version you want, for example, the firmware of ar750s with version 3.025
-
 1. clone imagebuilder
 ```
 $ git clone https://github.com/gl-inet/imagebuilder.git

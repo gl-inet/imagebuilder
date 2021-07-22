@@ -77,7 +77,7 @@ You'll find the compiled firmware image in *bin/gl-mifi/openwrt-mifi-ar71xx-gene
 
 For other firmwares, the compiled firmware file is in **bin/<device_name>/**
 
-# Compile stable firmware based on GL.iNet.
+# Compile standard firmware based on GL.iNet.
 1. clone imagebuilder
 ```
 $ git clone https://github.com/gl-inet/imagebuilder.git
@@ -107,7 +107,24 @@ $ cd ../
 ```
 $ ./gl_image -i -p ar750s
 ```
+# Shield the upgrade address of standard firmware
+The GL.iNet standard firmware will checks the latest firmware from the GL.iNet server, so you need to shield the firmware upgrade address server when compiling the firmware.
 
+If not, when GL.iNet releases the later firmware, your device will be prompted to upgrade on the Web interface, and if you or your customer clicks the upgrade button, GL.iNet standard firmware will replace your firmware.
+
+Close the method: add useless address or your upgrade server in the /etc/config/glconfig file, like this:
+```
+config service 'autoupdate'
+        option time '04:00'
+        option enable '0'
+        option firmware_path 'http://www.google.com'
+
+```
+The uci command to add address is as follows.
+```
+uci set glconfig.autoupdate.firmware_path='http://www.google.com'
+uci commit
+```
 # Build a custom ipk using imagebuilder
 
 You can go to the link https://github.com/gl-inet/sdk according to the instructions to compile helloworld.ipk. Use this package for imagebuilder test.Or use your own ipk and emulate the following steps to build the firmware.

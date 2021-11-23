@@ -29,6 +29,7 @@ def usage(pname):
     print(" -c|--config         User-defined configuration file")
     print(" -h|--help           Show this text message")
     print(" -o|--output         Get firmware info, firmware name/md5sum/size")
+    print(" -j|--json           Specify a different images.json file")
     print(" --offline           Ignore opensource ipk update")
     print("")
     print("Example: ")
@@ -274,8 +275,8 @@ def main(argv):
 
     try:
         (opts, args) = getopt.getopt(argv[1:],
-                "ap:e:b:f:c:lniho",
-                [ "all", "profile=", "extra=", "branch=", "files=", "config=", "list", "clean", "ignore", "help" ,"output", "offline"])
+                "ap:e:b:f:c:lniho:j:",
+                [ "all", "profile=", "extra=", "branch=", "files=", "config=", "list", "clean", "ignore", "help" ,"output", "offline", "json="])
     except getopt.GetoptError as e:
 	usage(pname)
 
@@ -321,6 +322,8 @@ def main(argv):
         if o in ("-o", "--output"):
             GetFirmwareInfo(os.getcwd() + "/bin", filename)
             sys.exit(1)
+        if o in ("-j", "--json"):
+            filename = v
 
     dir_name = "glinet"
 

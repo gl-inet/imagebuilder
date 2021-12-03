@@ -519,18 +519,45 @@ def main(argv):
                 print("Copy " + output + " to " + fw_name)
 
             elif c.getProfile(image).find('SF19A28') != -1:
-                check_call("find bin/ -name \"*%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\" | xargs cp -t %s/" \
-                        % (image, bin_dir), shell=True, cwd=im_path)
-                return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\"" % (image))
-                if filename != "glinet/images.json":
-                    fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + "_" + os.path.splitext(filename)[0] + os.path.splitext(output)[-1]
-                else:
-                    fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
-                if output != "":
-                    os.system('mv ' + output + ' ' + fw_name)
+                if image == "sft1200":
+                    check_call("find bin/ -name \"*%s-squashfs-sysupgrade*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
+                    return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-squashfs-sysupgrade*\"" % (image))
 
-                print"------------------------------------------------------------------------"
-                print("Copy " + output + " to " + fw_name)
+                    if filename != "glinet/images.json":
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
+                    else:
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
+                    if output != "":
+                        os.system('mv ' + output + ' ' + fw_name)
+                    
+                    print"------------------------------------------------------------------------"
+                    print("Copy " + output + " to " + fw_name)
+
+                    check_call("find bin/ -name \"*%s*squashfs-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
+                    return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (image))
+                    if filename != "glinet/images.json":
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + "_" + os.path.splitext(filename)[0] + os.path.splitext(output)[-1]
+                    else:
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
+                    if output != "":
+                        os.system('mv ' + output + ' ' + fw_name)
+
+                    print"------------------------------------------------------------------------"
+                    print("Copy " + output + " to " + fw_name)
+                else:
+                    check_call("find bin/ -name \"*%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\" | xargs cp -t %s/" \
+                            % (image, bin_dir), shell=True, cwd=im_path)
+                    return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\"" % (image))
+
+                    if filename != "glinet/images.json":
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + "_" + os.path.splitext(filename)[0] + os.path.splitext(output)[-1]
+                    else:
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
+                    if output != "":
+                        os.system('mv ' + output + ' ' + fw_name)
+
+                    print"------------------------------------------------------------------------"
+                    print("Copy " + output + " to " + fw_name)
 
             else:
                 #print(c.getProfile(image))

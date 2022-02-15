@@ -1,3 +1,5 @@
+# Note, depreciated. Pls go to the new imagebuilder https://github.com/gl-inet/gl-infra-builder 
+
 # Imagebuilder
 
 Imagebuilder for GL.iNet devices. The Imagebuilder (previously called the Image Generator) is a pre-compiled environment suitable for creating custom images without having to compile the entire OpenWRT build environment.

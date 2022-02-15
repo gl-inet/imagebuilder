@@ -1,4 +1,3 @@
-# Note, depreciated. Pls go to the new imagebuilder https://github.com/gl-inet/gl-infra-builder 
 
 # Imagebuilder
 
@@ -106,6 +105,9 @@ $ git checkout ar750s_v3.025_20190626
 $ cd ../
 ```
 7. compile firmware
+
+Pls add -i parameter to omit the private packages of gl-inet
+
 ```
 $ ./gl_image -i -p ar750s
 ```

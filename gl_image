@@ -110,60 +110,60 @@ class Config:
         print("%s" % self.data)
 
     def imagesList(self):
-        if self.data.has_key("profiles"):
+        if "profiles" in self.data:
             return self.data["profiles"].keys()
 
     def getProduct(self, name):
-        if self.data["profiles"][name].has_key("product"):
+        if "product" in self.data["profiles"][name]:
             return self.data["profiles"][name]["product"]
 
     def getDisabled(self, name):
-        if self.data["profiles"][name].has_key("disabled"):
+        if "disabled" in self.data["profiles"][name]:
             return self.data["profiles"][name]["disabled"]
         else:
             return False
 
     def getType(self, name):
-        if self.data["profiles"][name].has_key("type"):
+        if "type" in self.data["profiles"][name]:
             return self.data["profiles"][name]["type"]
         else:
             return "2C"
 
     def getState(self, name):
-        if self.data["profiles"][name].has_key("state"):
+        if "state" in self.data["profiles"][name]:
             return self.data["profiles"][name]["state"]
         else:
             return "testing"
 
     def getProfile(self, name):
-        if self.data["profiles"][name].has_key("profile"):
+        if "profile" in self.data["profiles"][name]:
             return self.data["profiles"][name]["profile"]
 
     def getVersion(self, name):
-        if self.data["profiles"][name].has_key("version"):
+        if "version" in self.data["profiles"][name]:
             return self.data["profiles"][name]["version"]
 
     def getImagebuilderPath(self, name):
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             return self.data["profiles"][name]["imagebuilder"]
     
     def getImagebuilderVersion(self, name):
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             return self.data["profiles"][name]["imagebuilder"].split('/', 1)[0]
 
     def getImagebuilderName(self, name):
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             return self.data["profiles"][name]["imagebuilder"].split('/', 1)[1]
 
     def getRepoUrl(self, name):
         url = ""
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             url = gl_inet_imagebuilder_url + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
         return url
 
     def downloadImagebuilder(self, name, save_dir):
         url = ""
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             url = gl_inet_imagebuilder_url + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
         
         if url:
@@ -172,12 +172,12 @@ class Config:
     def getPackages(self, name):
         packages = ""
 
-        if self.data["profiles"][name].has_key("packages"):
+        if "packages" in self.data["profiles"][name]:
             # Convert string to list
             pkg_list = self.data["profiles"][name]["packages"].split (' ')
             for pkg in pkg_list:
                 pkg_var = re.search(r'^\$(.*)', pkg)
-                if pkg_var and self.data.has_key("packages"):
+                if "packages" in pkg_var and self.data:
                     for (k, v) in self.data["packages"].items():
                         if k == pkg_var.group(1):
                             packages = packages + " " + v
@@ -187,7 +187,7 @@ class Config:
         return packages
 
     def getFilesPath(self, name):
-        if self.data["profiles"][name].has_key("files"):
+        if "files" in self.data["profiles"][name]:
             return self.data["profiles"][name]["files"]
 
 def show_images(images = []):

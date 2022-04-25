@@ -177,7 +177,7 @@ class Config:
             pkg_list = self.data["profiles"][name]["packages"].split (' ')
             for pkg in pkg_list:
                 pkg_var = re.search(r'^\$(.*)', pkg)
-                if "packages" in pkg_var and self.data:
+                if pkg_var and "packages" in self.data:
                     for (k, v) in self.data["packages"].items():
                         if k == pkg_var.group(1):
                             packages = packages + " " + v

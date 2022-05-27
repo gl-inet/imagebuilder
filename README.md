@@ -24,6 +24,10 @@ Running Imagebuilder under Windows can be done using the Windows Subsystem For L
 
 https://docs.microsoft.com/en-us/windows/wsl/install-win10
 
+**Note for Windows Subsystem For Linux (WSL) users:**
+
+The Imagebuilder requires a "case sensitive" system, Windows is unfortunately not. To run the Imagebuilder in WSL you **MUST** clone the repo to the linux folder tree, ie: ```/home/<username>/``` or any other folder you choose. This is required, you **CAN NOT** run it from ```/mnt/c/``` or any other windows native drive mounted in WSL. Running the Imagebuilder from a Windows mounted disk will result in a failed build with cryptic messages.
+
 ## Preparing your build environment
 
 To use the Imagebuilder on your system will usually require you to install some extra packages.
@@ -35,50 +39,9 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install device-tree-compiler gawk gcc git g++ make ncurses-dev python unzip -y
 ```
 
-## Clone the Imagebuilder to your system
-
-```bash
-git clone https://github.com/gl-inet/imagebuilder gl_imagebuilder
-cd gl_imagebuilder
-```
-
-**Note for Windows Subsystem For Linux (WSL) users:**
-
-The Imagebuilder requires a "case sensitive" system, Windows is unfortunately not. To run the Imagebuilder in WSL you **MUST** clone the repo to the linux folder tree, ie: ```/home/<username>/``` or any other folder you choose. This is required, you **CAN NOT** run it from ```/mnt/c/``` or any other windows native drive mounted in WSL. Running the Imagebuilder from a Windows mounted disk will result in a failed build with cryptic messages.
-
 # Usage
 
-## 1.Basic usage
-
-You can list all the device names by running the following command.
-```
-$ ./gl_image -l
-```
-You can run **./gl_image -p <image_name>** to build a specific firmware.For example, if you want to build a mifi firmware, run
-```
-$ ./gl_image -p mifi
-```
-To build all the device firmwares, run
-```
-$ ./gl_image -a
-```
-To see more details and advanced options,run
-```
-$ ./gl_image -h
-```
-
-## 2.Add additional packages
-
-For example, make an image for the **mifi** with some [extra packages](https://openwrt.org/packages/start) included:
-
-```bash
-$ ./gl_image -p mifi -e "openssh-sftp-server nano htop"
-```
-You'll find the compiled firmware image in *bin/gl-mifi/openwrt-mifi-ar71xx-generic-gl-mifi-squashfs-sysupgrade.bin*
-
-For other firmwares, the compiled firmware file is in **bin/<device_name>/**
-
-# Compile standard firmware based on GL.iNet.
+## Compile standard firmware based on GL.iNet.
 1. clone imagebuilder
 ```
 $ git clone https://github.com/gl-inet/imagebuilder.git
@@ -94,22 +57,33 @@ $ git clone https://github.com/gl-inet/glinet.git
 4. go to the glinet directory and view the history tag
 ```
 $ cd glinet
+$ git pull
 $ git tag
 ```
-5. switch to the 3.025 version of the ar750s firmware tag
+Please switch the pure number (version) tag, such as 3.211 or 3.212. If the pure number (version) tag does not have the product target you want or the compilation fails, please select the product tag with the latest date, such as ax1800_v3.213_20220325.
+5. switch to the 3.212 version of the ar750s firmware tag
 ```
-$ git checkout ar750s_v3.025_20190626
+$ git checkout 3.212
 ```
 6. return to the imagebuilder folder
 ```
 $ cd ../
 ```
 7. compile firmware
-
-
 ```
 $ ./gl_image -i -p ar750s
 ```
+## Add additional packages
+
+For example, make an image for the **ar750s** with some [extra packages](https://openwrt.org/packages/start) included:
+
+```bash
+$ ./gl_image -i -p ar750s -e "tcpdump nano"
+```
+You'll find the compiled firmware image in *bin/20220526/ar750s/*
+
+For other firmwares, the compiled firmware file is in **bin/xxxxxxxx/<device_name>/**
+
 # Shield the upgrade address of standard firmware
 The GL.iNet standard firmware will checks the latest firmware from the GL.iNet server, so you need to shield the firmware upgrade address server when compiling the firmware.
 

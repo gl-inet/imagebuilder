@@ -61,6 +61,7 @@ $ git pull
 $ git tag
 ```
 Please switch the pure number (version) tag, such as 3.211 or 3.212. If the pure number (version) tag does not have the product target you want or the compilation fails, please select the product tag with the latest date, such as ax1800_v3.213_20220325.
+
 5. switch to the 3.212 version of the ar750s firmware tag
 ```
 $ git checkout 3.212

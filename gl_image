@@ -539,7 +539,7 @@ def main(argv):
                     check_call("find bin/ -name \"*%s*squashfs-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
                     return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (image))
                     if filename != "glinet/images.json":
-                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + "_" + os.path.splitext(filename)[0] + os.path.splitext(output)[-1]
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                     else:
                         fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                     if output != "":
@@ -553,7 +553,7 @@ def main(argv):
                     return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\"" % (image))
 
                     if filename != "glinet/images.json":
-                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + "_" + os.path.splitext(filename)[0] + os.path.splitext(output)[-1]
+                        fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                     else:
                         fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                     if output != "":

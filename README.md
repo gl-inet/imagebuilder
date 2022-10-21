@@ -41,7 +41,7 @@ sudo apt install device-tree-compiler gawk gcc git g++ make ncurses-dev python u
 
 # Usage
 
-## Compile standard firmware based on GL.iNet.
+## Compile standard firmware based on GL.iNet(For example ar750s).
 1. clone imagebuilder
 ```
 $ git clone https://github.com/gl-inet/imagebuilder.git
@@ -58,13 +58,26 @@ $ git clone https://github.com/gl-inet/glinet.git
 ```
 $ cd glinet
 $ git pull
-$ git tag
+$ git tag | grep ar750s
 ```
-Please switch the pure number (version) tag, such as 3.211 or 3.212. If the pure number (version) tag does not have the product target you want or the compilation fails, please select the product tag with the latest date, such as ax1800_v3.213_20220325.
+You will get all the version about the ar750s product, like the list bebow, please switch the version tag what you want.
+```bash
+v3.003_ar750s
+v3.009_ar750s
+v3.025_ar750s
+v3.100_ar750s
+v3.101_ar750s
+v3.104_ar750s
+v3.105_ar150/ar300M/ar300M16/mt300n-v2/ar750/ar750s/x750/mifi/b1300/s1300/ap1300/mv1000/mv1000w
+v3.201_ar150/mifi/usb150/ar300M/ar300M16/mt300n-v2/n300/ar750/ar750s/x750/e750/xe300/x300b/mt1300
+v3.203_ar150/mifi/ar300M/ar300M16/mt300n-v2/n300/ar750/ar750s/x750/e750/x1200/xe300/x300b/mv1000/s1300/ap1300
+v3.212_ar150/mifi/ar300m/usb150/n300/ar750/ar750s/x750/xe300/mt300n-v2/mv1000/b1300/s1300/ap1300/b2200
+v3.215_ap1300/ar150/ar300m/ar750/ar750s/b1300/b2200/e750/mifi/mt1300/mt300n-v2/mv1000-emmc/n300/s1300/sf1200/sft1200/usb150/x300b/x750/xe300
+```
 
-5. switch to the 3.212 version of the ar750s firmware tag
+5. for example, switch to the 3.215 version of the ar750s firmware tag
 ```
-$ git checkout 3.212
+$ git checkout v3.215_ap1300/ar150/ar300m/ar750/ar750s/b1300/b2200/e750/mifi/mt1300/mt300n-v2/mv1000-emmc/n300/s1300/sf1200/sft1200/usb150/x300b/x750/xe300
 ```
 6. return to the imagebuilder folder
 ```

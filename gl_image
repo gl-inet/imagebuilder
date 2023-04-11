@@ -6,7 +6,7 @@ import sys
 import json
 import getopt
 import time
-import commands
+import subprocess
 import platform
 import hashlib
 from subprocess import check_call
@@ -103,67 +103,67 @@ class Config:
                 self.data = json.load(fd)
                 fd.close()
         except:
-            print "Oops! Failed to parse %s" % self.filename
+            print("Oops! Failed to parse %s" % self.filename)
             sys.exit(1)
 
     def dump(self):
-        print "%s" % self.data
+        print("%s" % self.data)
 
     def imagesList(self):
-        if self.data.has_key("profiles"):
+        if "profiles" in self.data:
             return self.data["profiles"].keys()
 
     def getProduct(self, name):
-        if self.data["profiles"][name].has_key("product"):
+        if "product" in self.data["profiles"][name]:
             return self.data["profiles"][name]["product"]
 
     def getDisabled(self, name):
-        if self.data["profiles"][name].has_key("disabled"):
+        if "disabled" in self.data["profiles"][name]:
             return self.data["profiles"][name]["disabled"]
-	else:
-	    return False
+        else:
+            return False
 
     def getType(self, name):
-        if self.data["profiles"][name].has_key("type"):
+        if "type" in self.data["profiles"][name]:
             return self.data["profiles"][name]["type"]
-	else:
-	    return "2C"
+        else:
+            return "2C"
 
     def getState(self, name):
-        if self.data["profiles"][name].has_key("state"):
+        if "state" in self.data["profiles"][name]:
             return self.data["profiles"][name]["state"]
-	else:
-	    return "testing"
+        else:
+            return "testing"
 
     def getProfile(self, name):
-        if self.data["profiles"][name].has_key("profile"):
+        if "profile" in self.data["profiles"][name]:
             return self.data["profiles"][name]["profile"]
 
     def getVersion(self, name):
-        if self.data["profiles"][name].has_key("version"):
+        if "version" in self.data["profiles"][name]:
             return self.data["profiles"][name]["version"]
 
     def getImagebuilderPath(self, name):
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             return self.data["profiles"][name]["imagebuilder"]
     
     def getImagebuilderVersion(self, name):
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             return self.data["profiles"][name]["imagebuilder"].split('/', 1)[0]
 
     def getImagebuilderName(self, name):
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             return self.data["profiles"][name]["imagebuilder"].split('/', 1)[1]
 
     def getRepoUrl(self, name):
         url = ""
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             url = gl_inet_imagebuilder_url + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
         return url
 
     def downloadImagebuilder(self, name, save_dir):
         url = ""
-        if self.data["profiles"][name].has_key("imagebuilder"):
+        if "imagebuilder" in self.data["profiles"][name]:
             url = gl_inet_imagebuilder_url + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
         
         if url:
@@ -172,12 +172,12 @@ class Config:
     def getPackages(self, name):
         packages = ""
 
-        if self.data["profiles"][name].has_key("packages"):
+        if "packages" in self.data["profiles"][name]:
             # Convert string to list
             pkg_list = self.data["profiles"][name]["packages"].split (' ')
             for pkg in pkg_list:
                 pkg_var = re.search(r'^\$(.*)', pkg)
-                if pkg_var and self.data.has_key("packages"):
+                if pkg_var and "packages" in self.data:
                     for (k, v) in self.data["packages"].items():
                         if k == pkg_var.group(1):
                             packages = packages + " " + v
@@ -187,16 +187,16 @@ class Config:
         return packages
 
     def getFilesPath(self, name):
-        if self.data["profiles"][name].has_key("files"):
+        if "files" in self.data["profiles"][name]:
             return self.data["profiles"][name]["files"]
 
 def show_images(images = []):
     if images:
-        print "User-defined Profiles:\n"
+        print("User-defined Profiles:\n")
         for img in images:
-            print "  %s" % img
+            print("  %s" % img)
     else:
-        print "No any profile found"
+        print("No any profile found")
 
 makeIndex = re.sub('[\t\n ]+', ' ', """
         makeIndex() {
@@ -214,8 +214,8 @@ makeIndex = re.sub('[\t\n ]+', ' ', """
 
                     echo "Generating package index...";
 
-	            ${script_dir}/ipkg-make-index.sh . 2>&1 > Packages.manifest;
-	            grep -avE '^(Maintainer|LicenseFiles|Source|Require)' Packages.manifest > Packages && \
+                    ${script_dir}/ipkg-make-index.sh . 2>&1 > Packages.manifest;
+                    grep -avE '^(Maintainer|LicenseFiles|Source|Require)' Packages.manifest > Packages && \
                             gzip -9nc Packages > Packages.gz;
 
                     return 1;
@@ -249,7 +249,7 @@ def create_files(im_path, board, ver, dev_type):
         check_output("echo %s > %s" % (dev_type, tmpfiles+ "/etc/glproduct"), shell=True)
 
     # version.date
-    # return_code, output = commands.getstatusoutput("date \"+%F %k:%M:%S\"")
+    # return_code, output = subprocess.getstatusoutput("date \"+%F %k:%M:%S\"")
     # check_output("echo %s > %s" % (output, tmpfiles+ "/etc/version.date"), shell=True)
     compile_time = time.strftime('%Y-%m-%d %k:%M:%S',time.localtime(time.time()))
     check_output("echo %s > %s" % (compile_time, tmpfiles+ "/etc/version.date"), shell=True)
@@ -278,7 +278,7 @@ def main(argv):
                 "ap:e:b:f:c:lniho:j:",
                 [ "all", "profile=", "extra=", "branch=", "files=", "config=", "list", "clean", "ignore", "help" ,"output", "offline", "json="])
     except getopt.GetoptError as e:
-	usage(pname)
+        usage(pname)
 
     extra_ipks = ""
     branch = "develop"
@@ -361,9 +361,9 @@ def main(argv):
         return 0
 
     for image in images:
-	if c.getDisabled(image):
+        if c.getDisabled(image):
             print("\n"+image+ "has disabled,Ignored!\n")
-	    continue
+            continue
         if c.getImagebuilderVersion(image) != c.getImagebuilderName(image).split('_')[len(c.getImagebuilderName(image).split('_')) - 1]:
             print("\nVersion error! Please check if the " +image+ " 's imagebuilder path is correct in json config.\n")
             return 0
@@ -395,7 +395,7 @@ def main(argv):
         try:
             board = check_output("make -f rules.mk val.BOARD V=s 2>/dev/null", shell=True, cwd=im_path).strip()
         except:
-            print "Makefile missing..."
+            print("Makefile missing...")
             continue
 
         env = {"PKG_PATH": "%s/glinet/%s" % (os.getcwd(), board)}
@@ -403,7 +403,7 @@ def main(argv):
             check_call(['/bin/sh', '-c', '%s; if makeIndex; then makeIndex; fi'
                 % makeIndex], env=env, cwd=im_path)
         except:
-            print "Failed to update glinet..."
+            print("Failed to update glinet...")
             continue
 
         # Offline mode
@@ -431,16 +431,16 @@ def main(argv):
 
         # Output directory
         compile_time = time.strftime('%Y%m%d',time.localtime(time.time()))
-	if c.getType(image) == "2B":
-        	bin_dir = os.getcwd() + "/bin/"+ compile_time + "/2B/" + image
-	else:
-        	bin_dir = os.getcwd() + "/bin/"+ compile_time + "/" + image
+        if c.getType(image) == "2B":
+                bin_dir = os.getcwd() + "/bin/"+ compile_time + "/2B/" + image
+        else:
+                bin_dir = os.getcwd() + "/bin/"+ compile_time + "/" + image
 
         if not os.path.isdir(bin_dir):
             check_output("mkdir -p %s" % bin_dir, shell=True)
 
         try:
-	    check_call("echo %s > release"% (c.getVersion(image)), shell=True, cwd=im_path)
+            check_call("echo %s > release"% (c.getVersion(image)), shell=True, cwd=im_path)
             os.environ['OFFLINE'] = str(offline)
             check_call("make image \
                     PROFILE=%s \
@@ -449,68 +449,68 @@ def main(argv):
                     EXTRA_IMAGE_NAME=%s" \
                     % (c.getProfile(image), '{} {}'.format(c.getPackages(image), extra_ipks), tmpfiles, image), \
                                 shell=True, cwd=im_path)
-	    if c.getState(image) == "develop":
-		os.system("echo 'Pls do not use the firmwares in this folder until this file is removed.' >  " + bin_dir + "/Do\ not\ use\ until\ this\ file\ is\ removed.txt")
-	    else:
-		os.system("rm " + bin_dir + "/Do\ not\ use\ until\ this\ file\ is\ removed.txt 2>/dev/null")
+            if c.getState(image) == "develop":
+                os.system("echo 'Pls do not use the firmwares in this folder until this file is removed.' >  " + bin_dir + "/Do\ not\ use\ until\ this\ file\ is\ removed.txt")
+            else:
+                os.system("rm " + bin_dir + "/Do\ not\ use\ until\ this\ file\ is\ removed.txt 2>/dev/null")
             if c.getProfile(image) == "QSDK_Premium":
                 if image == "b1300" or image == "b1300_2b":
                     check_call("find single_img_dir/ -name b1300-nor-apps.img | xargs cp -t %s/" \
                             % (bin_dir), shell=True, cwd=im_path)
 
-                    return_code, output = commands.getstatusoutput("find %s -name b1300-nor-apps.img" % bin_dir)
+                    return_code, output = subprocess.getstatusoutput("find %s -name b1300-nor-apps.img" % bin_dir)
                     if output != "":
                         fw_name = bin_dir + "/" + "qsdk-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                         os.system('mv ' + output + ' ' + fw_name)
-                    # return_code, output = commands.getstatusoutput("basename %s" % output)
+                    # return_code, output = subprocess.getstatusoutput("basename %s" % output)
                 elif image == "s1300":
                     check_call("find single_img_dir/ -name s1300-noremmc-apps.img | xargs cp -t %s/" \
                             % (bin_dir), shell=True, cwd=im_path)
 
-                    return_code, output = commands.getstatusoutput("find %s -name s1300-noremmc-apps.img" % bin_dir)
+                    return_code, output = subprocess.getstatusoutput("find %s -name s1300-noremmc-apps.img" % bin_dir)
                     if output != "":
                         fw_name = bin_dir + "/" + "qsdk-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                         os.system('mv ' + output + ' ' + fw_name)
-                    # return_code, output = commands.getstatusoutput("basename %s" % output)
+                    # return_code, output = subprocess.getstatusoutput("basename %s" % output)
                 elif image == "ap1300":
                     check_call("find single_img_dir/ -name ap1300-nornand-apps.img | xargs cp -t %s/" \
                             % (bin_dir), shell=True, cwd=im_path)
 
-                    return_code, output = commands.getstatusoutput("find %s -name ap1300-nornand-apps.img" % bin_dir)
+                    return_code, output = subprocess.getstatusoutput("find %s -name ap1300-nornand-apps.img" % bin_dir)
                     if output != "":
                         fw_name = bin_dir + "/" + "qsdk-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                         os.system('mv ' + output + ' ' + fw_name)
-                    # return_code, output = commands.getstatusoutput("basename %s" % output)
+                    # return_code, output = subprocess.getstatusoutput("basename %s" % output)
                 elif image == "b2200":
                     check_call("find single_img_dir/ -name b2200-noremmc-apps.img | xargs cp -t %s/" \
                             % (bin_dir), shell=True, cwd=im_path)
 
-                    return_code, output = commands.getstatusoutput("find %s -name b2200-noremmc-apps.img" % bin_dir)
+                    return_code, output = subprocess.getstatusoutput("find %s -name b2200-noremmc-apps.img" % bin_dir)
                     if output != "":
                         fw_name = bin_dir + "/" + "qsdk-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                         os.system('mv ' + output + ' ' + fw_name)
-                    # return_code, output = commands.getstatusoutput("basename %s" % output)
+                    # return_code, output = subprocess.getstatusoutput("basename %s" % output)
                 elif image == "ax1800":
                     check_call("find single_img_dir/ -name ax1800-nand-apps.img | xargs cp -t %s/" \
                             % (bin_dir), shell=True, cwd=im_path)
 
-                    return_code, output = commands.getstatusoutput("find %s -name ax1800-nand-apps.img" % bin_dir)
+                    return_code, output = subprocess.getstatusoutput("find %s -name ax1800-nand-apps.img" % bin_dir)
                     if output != "":
                         fw_name = bin_dir + "/" + "qsdk-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                         os.system('mv ' + output + ' ' + fw_name)
-                    # return_code, output = commands.getstatusoutput("basename %s" % output)
+                    # return_code, output = subprocess.getstatusoutput("basename %s" % output)
                 else:
                     check_call("find single_img_dir/ -maxdepth 1 -name *.img | xargs cp -t %s/" \
                             % (bin_dir), shell=True, cwd=im_path)
-                    # return_code, output = commands.getstatusoutput("basename %s" % output)
+                    # return_code, output = subprocess.getstatusoutput("basename %s" % output)
                 
-                print"------------------------------------------------------------------------"
+                print("------------------------------------------------------------------------")
                 print("Copy " + output + " to " + fw_name)
 
             elif image == "mv1000-emmc":
                 check_call("find bin/ -name \"*%s-squashfs-emmc*\" | xargs cp -t %s/" \
                         % (c.getProfile(image).lower(), bin_dir), shell=True, cwd=im_path)
-                return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-squashfs-emmc*\"" % (c.getProfile(image).lower()))
+                return_code, output = subprocess.getstatusoutput("find bin/ -name \"*-%s-squashfs-emmc*\"" % (c.getProfile(image).lower()))
                 if filename != "glinet/images.json":
                     fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                 else:
@@ -518,13 +518,13 @@ def main(argv):
                 if output != "":
                     os.system('mv ' + output + ' ' + fw_name)
 
-                print"------------------------------------------------------------------------"
+                print("------------------------------------------------------------------------")
                 print("Copy " + output + " to " + fw_name)
 
             elif c.getProfile(image).find('SF19A28') != -1:
                 if image == "sft1200":
                     check_call("find bin/ -name \"*%s-squashfs-sysupgrade*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
-                    return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-squashfs-sysupgrade*\"" % (image))
+                    return_code, output = subprocess.getstatusoutput("find bin/ -name \"*-%s-squashfs-sysupgrade*\"" % (image))
 
                     if filename != "glinet/images.json":
                         fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
@@ -533,11 +533,11 @@ def main(argv):
                     if output != "":
                         os.system('mv ' + output + ' ' + fw_name)
                     
-                    print"------------------------------------------------------------------------"
+                    print("------------------------------------------------------------------------")
                     print("Copy " + output + " to " + fw_name)
 
                     check_call("find bin/ -name \"*%s*squashfs-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
-                    return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (image))
+                    return_code, output = subprocess.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (image))
                     if filename != "glinet/images.json":
                         fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                     else:
@@ -545,12 +545,12 @@ def main(argv):
                     if output != "":
                         os.system('mv ' + output + ' ' + fw_name)
 
-                    print"------------------------------------------------------------------------"
+                    print("------------------------------------------------------------------------")
                     print("Copy " + output + " to " + fw_name)
                 else:
                     check_call("find bin/ -name \"*%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\" | xargs cp -t %s/" \
                             % (image, bin_dir), shell=True, cwd=im_path)
-                    return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\"" % (image))
+                    return_code, output = subprocess.getstatusoutput("find bin/ -name \"*-%s-siflower-sf19a28-fullmask-squashfs-sysupgrade*\"" % (image))
 
                     if filename != "glinet/images.json":
                         fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
@@ -559,7 +559,7 @@ def main(argv):
                     if output != "":
                         os.system('mv ' + output + ' ' + fw_name)
 
-                    print"------------------------------------------------------------------------"
+                    print("------------------------------------------------------------------------")
                     print("Copy " + output + " to " + fw_name)
 
             else:
@@ -567,7 +567,7 @@ def main(argv):
                 #print(image)
                 check_call("find bin/ -name \"*%s-squashfs-sysupgrade*\" | xargs cp -t %s/" \
                         % (c.getProfile(image).lower(), bin_dir), shell=True, cwd=im_path)
-                return_code, output = commands.getstatusoutput("find bin/ -name \"*-%s-squashfs-sysupgrade*\"" % (c.getProfile(image).lower()))
+                return_code, output = subprocess.getstatusoutput("find bin/ -name \"*-%s-squashfs-sysupgrade*\"" % (c.getProfile(image).lower()))
                 if filename != "glinet/images.json":
                     fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
                 else:
@@ -575,20 +575,20 @@ def main(argv):
                 if output != "":
                     os.system('mv ' + output + ' ' + fw_name)
 
-                print"------------------------------------------------------------------------"
+                print("------------------------------------------------------------------------")
                 print("Copy " + output + " to " + fw_name)
 
                 if c.getProfile(image).find('nand') != -1 or c.getProfile(image).find('xe300-iot') != -1 or c.getProfile(image).find('axt1800') != -1 or c.getProfile(image).find('ax1800') != -1:
                     if image == "e750-1907":
-                    	check_call("find bin/ -name \"*%s*squashfs-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
-                    	return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (c.getProfile(image).lower()))
+                            check_call("find bin/ -name \"*%s*squashfs-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
+                            return_code, output = subprocess.getstatusoutput("find bin/ -name \"*%s*squashfs-factory*\"" % (c.getProfile(image).lower()))
                     #else image == "xe300":
                     else:
                         check_call("find bin/ -name \"*%s*-factory.img\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
-                    	return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*-factory.img\"" % (c.getProfile(image).lower()))
+                        return_code, output = subprocess.getstatusoutput("find bin/ -name \"*%s*-factory.img\"" % (c.getProfile(image).lower()))
                     #else:
                      #   check_call("find bin/ -name \"*%s*ubi-factory*\" | xargs cp -t %s/" % (image, bin_dir), shell=True, cwd=im_path)
-                    #	return_code, output = commands.getstatusoutput("find bin/ -name \"*%s*ubi-factory*\"" % (c.getProfile(image).lower()))
+                    #        return_code, output = subprocess.getstatusoutput("find bin/ -name \"*%s*ubi-factory*\"" % (c.getProfile(image).lower()))
 
                     if filename != "glinet/images.json":
                         fw_name = bin_dir + "/" + "openwrt-" + image + "-" + c.getVersion(image) + "-" + time.strftime("%m%d", time.localtime()) + os.path.splitext(output)[-1]
@@ -599,7 +599,7 @@ def main(argv):
                         print("Copy " + output + " to " + fw_name)
 
         except:
-            print "Failed to build %s..." % c.getProfile(image)
+            print ("Failed to build %s..." % c.getProfile(image))
             continue
 
 if __name__ == "__main__":

@@ -167,7 +167,7 @@ class Config:
             url = gl_inet_imagebuilder_url + self.data["profiles"][name]["imagebuilder"].split('/', 1)[1] + ".git"
         
         if url:
-            check_call("git clone %s %s" % (url, save_dir), shell=True)
+            check_call("git clone --progress %s %s" % (url, save_dir), shell=True)
 
     def getPackages(self, name):
         packages = ""
@@ -329,7 +329,7 @@ def main(argv):
 
     if not os.path.isdir(dir_name):
         # check_call("git clone --single-branch -b %s --depth=1 %s %s" % (branch, url, dir_name), shell=True)
-        check_call("git clone %s %s" % (gl_inet_ipks_url, dir_name), shell=True)
+        check_call("git clone --progress %s %s" % (gl_inet_ipks_url, dir_name), shell=True)
 
     c = Config(filename)
 
